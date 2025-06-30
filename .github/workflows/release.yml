@@ -6,6 +6,10 @@ on:
       - "v*"
   workflow_dispatch:
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   build-macos:
     runs-on: macos-latest
@@ -258,14 +262,17 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
 
+      - name: List downloaded files
+        run: find . -type f -name "*.dmg" -o -name "*.tar.gz" -o -name "*.zip" | head -20
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            hash-forge-dmg/Hash-Forge.dmg
-            hash-forge-cli-macos/hash-forge-cli-macos.tar.gz
-            hash-forge-linux/hash-forge-linux.tar.gz
-            hash-forge-windows/hash-forge-windows.zip
+            Hash-Forge.dmg
+            hash-forge-cli-macos.tar.gz
+            hash-forge-linux.tar.gz
+            hash-forge-windows.zip
           draft: false
           prerelease: false
           generate_release_notes: true
