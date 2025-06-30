@@ -1,0 +1,273 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-apple-darwin,aarch64-apple-darwin
+
+      - name: Cache cargo dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Install create-dmg
+        run: npm install -g create-dmg
+
+      - name: Build x86_64 binary
+        run: |
+          cargo build --release --target x86_64-apple-darwin --bin hash-forge
+          cargo build --release --target x86_64-apple-darwin --bin hash-forge-gui
+
+      - name: Build aarch64 binary
+        run: |
+          cargo build --release --target aarch64-apple-darwin --bin hash-forge
+          cargo build --release --target aarch64-apple-darwin --bin hash-forge-gui
+
+      - name: Create universal binaries
+        run: |
+          mkdir -p target/universal-apple-darwin/release
+          lipo -create -output target/universal-apple-darwin/release/hash-forge \
+            target/x86_64-apple-darwin/release/hash-forge \
+            target/aarch64-apple-darwin/release/hash-forge
+          lipo -create -output target/universal-apple-darwin/release/hash-forge-gui \
+            target/x86_64-apple-darwin/release/hash-forge-gui \
+            target/aarch64-apple-darwin/release/hash-forge-gui
+
+      - name: Create app bundle for GUI
+        run: |
+          # Verify icon exists
+          if [ ! -f "assets/image.png" ]; then
+            echo "Error: assets/image.png not found!"
+            exit 1
+          fi
+
+          mkdir -p "Hash Forge.app/Contents/MacOS"
+          mkdir -p "Hash Forge.app/Contents/Resources"
+
+          # Copy the GUI binary
+          cp target/universal-apple-darwin/release/hash-forge-gui "Hash Forge.app/Contents/MacOS/Hash Forge"
+
+          # Copy the CLI binary to Resources so it's included in the bundle
+          cp target/universal-apple-darwin/release/hash-forge "Hash Forge.app/Contents/Resources/"
+
+          # Convert PNG to ICNS for macOS app icon
+          mkdir -p icon.iconset
+          # Create different sizes for the iconset
+          sips -z 16 16 assets/image.png --out icon.iconset/icon_16x16.png
+          sips -z 32 32 assets/image.png --out icon.iconset/icon_16x16@2x.png
+          sips -z 32 32 assets/image.png --out icon.iconset/icon_32x32.png
+          sips -z 64 64 assets/image.png --out icon.iconset/icon_32x32@2x.png
+          sips -z 128 128 assets/image.png --out icon.iconset/icon_128x128.png
+          sips -z 256 256 assets/image.png --out icon.iconset/icon_128x128@2x.png
+          sips -z 256 256 assets/image.png --out icon.iconset/icon_256x256.png
+          sips -z 512 512 assets/image.png --out icon.iconset/icon_256x256@2x.png
+          sips -z 512 512 assets/image.png --out icon.iconset/icon_512x512.png
+          sips -z 1024 1024 assets/image.png --out icon.iconset/icon_512x512@2x.png
+
+          # Create the ICNS file
+          iconutil -c icns icon.iconset -o "Hash Forge.app/Contents/Resources/AppIcon.icns"
+
+          # Create Info.plist
+          cat > "Hash Forge.app/Contents/Info.plist" << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>CFBundleExecutable</key>
+              <string>Hash Forge</string>
+              <key>CFBundleIdentifier</key>
+              <string>com.hashforge.app</string>
+              <key>CFBundleName</key>
+              <string>Hash Forge</string>
+              <key>CFBundleVersion</key>
+              <string>1.0.0</string>
+              <key>CFBundleShortVersionString</key>
+              <string>1.0.0</string>
+              <key>CFBundlePackageType</key>
+              <string>APPL</string>
+              <key>CFBundleIconFile</key>
+              <string>AppIcon</string>
+              <key>LSMinimumSystemVersion</key>
+              <string>10.15</string>
+              <key>CFBundleDisplayName</key>
+              <string>Hash Forge</string>
+              <key>CFBundleInfoDictionaryVersion</key>
+              <string>6.0</string>
+              <key>LSApplicationCategoryType</key>
+              <string>public.app-category.utilities</string>
+              <key>NSHighResolutionCapable</key>
+              <true/>
+          </dict>
+          </plist>
+          EOF
+
+          # Make the binary executable
+          chmod +x "Hash Forge.app/Contents/MacOS/Hash Forge"
+          chmod +x "Hash Forge.app/Contents/Resources/hash-forge"
+
+      - name: Create DMG
+        run: |
+          # Create a temporary directory for DMG contents
+          mkdir -p dmg-contents
+          cp -R "Hash Forge.app" dmg-contents/
+
+          # Create a symbolic link to Applications folder
+          ln -s /Applications dmg-contents/Applications
+
+          # Create the DMG
+          create-dmg \
+            --volname "Hash Forge" \
+            --volicon "Hash Forge.app/Contents/Resources/AppIcon.icns" \
+            --window-pos 200 120 \
+            --window-size 800 400 \
+            --icon-size 100 \
+            --icon "Hash Forge.app" 200 190 \
+            --hide-extension "Hash Forge.app" \
+            --app-drop-link 600 185 \
+            --hdiutil-quiet \
+            "Hash-Forge.dmg" \
+            "dmg-contents/" || true
+
+          # Fallback if create-dmg fails
+          if [ ! -f "Hash-Forge.dmg" ]; then
+            echo "create-dmg failed, using hdiutil directly"
+            hdiutil create -volname "Hash Forge" -srcfolder dmg-contents -ov -format UDZO Hash-Forge.dmg
+          fi
+
+      - name: Create standalone CLI archive
+        run: |
+          mkdir -p hash-forge-cli
+          cp target/universal-apple-darwin/release/hash-forge hash-forge-cli/
+          cp README.md hash-forge-cli/
+          cp LICENSE hash-forge-cli/
+          tar -czf hash-forge-cli-macos.tar.gz hash-forge-cli/
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: hash-forge-dmg
+          path: Hash-Forge.dmg
+
+      - name: Upload CLI artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: hash-forge-cli-macos
+          path: hash-forge-cli-macos.tar.gz
+
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Build binaries
+        run: |
+          cargo build --release --bin hash-forge
+          cargo build --release --bin hash-forge-gui
+
+      - name: Create archive
+        run: |
+          mkdir -p hash-forge-linux
+          cp target/release/hash-forge hash-forge-linux/
+          cp target/release/hash-forge-gui hash-forge-linux/
+          cp README.md hash-forge-linux/
+          cp LICENSE hash-forge-linux/
+          tar -czf hash-forge-linux.tar.gz hash-forge-linux/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: hash-forge-linux
+          path: hash-forge-linux.tar.gz
+
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Build binaries
+        run: |
+          cargo build --release --bin hash-forge
+          cargo build --release --bin hash-forge-gui
+
+      - name: Create archive
+        run: |
+          mkdir hash-forge-windows
+          copy target\release\hash-forge.exe hash-forge-windows\
+          copy target\release\hash-forge-gui.exe hash-forge-windows\
+          copy README.md hash-forge-windows\
+          copy LICENSE hash-forge-windows\
+          Compress-Archive -Path hash-forge-windows -DestinationPath hash-forge-windows.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: hash-forge-windows
+          path: hash-forge-windows.zip
+
+  release:
+    needs: [build-macos, build-linux, build-windows]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            hash-forge-dmg/Hash-Forge.dmg
+            hash-forge-cli-macos/hash-forge-cli-macos.tar.gz
+            hash-forge-linux/hash-forge-linux.tar.gz
+            hash-forge-windows/hash-forge-windows.zip
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

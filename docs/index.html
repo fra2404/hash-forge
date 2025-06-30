@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash Forge - Professional Hash Generator & Verifier</title>
+    <meta name="description" content="Professional hash generator and verifier built with Rust. Multiple algorithms, dual interfaces, and enterprise-grade security.">
+    <meta name="keywords" content="hash, crypto, security, rust, cli, gui, sha256, blake3, argon2, bcrypt">
+    <meta name="author" content="Francesco">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://fra2404.github.io/hash-forge/">
+    <meta property="og:title" content="Hash Forge - Professional Hash Generator & Verifier">
+    <meta property="og:description" content="Professional hash generator and verifier built with Rust. Multiple algorithms, dual interfaces, and enterprise-grade security.">
+    <meta property="og:image" content="https://fra2404.github.io/hash-forge/assets/og-image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://fra2404.github.io/hash-forge/">
+    <meta property="twitter:title" content="Hash Forge - Professional Hash Generator & Verifier">
+    <meta property="twitter:description" content="Professional hash generator and verifier built with Rust. Multiple algorithms, dual interfaces, and enterprise-grade security.">
+    <meta property="twitter:image" content="https://fra2404.github.io/hash-forge/assets/og-image.png">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>🔧 Hash Forge</h1>
+                    <p class="tagline">Professional hash generator and verifier built with Rust</p>
+                    <p class="description">
+                        Multiple cryptographic algorithms, dual CLI/GUI interfaces, and enterprise-grade security. 
+                        Perfect for developers, security professionals, and anyone who needs reliable hash generation.
+                    </p>
+                    
+                    <div class="badges">
+                        <img src="https://img.shields.io/badge/rust-1.70+-orange.svg" alt="Rust Version">
+                        <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License">
+                        <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-blue" alt="Cross Platform">
+                    </div>
+                    
+                    <div class="cta-buttons">
+                        <a href="#download" class="btn btn-primary">
+                            📥 Download Now
+                        </a>
+                        <a href="https://github.com/fra2404/hash-forge" class="btn btn-secondary" target="_blank">
+                            🔗 View on GitHub
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="hero-demo">
+                    <div class="terminal">
+                        <div class="terminal-header">
+                            <div class="terminal-buttons">
+                                <span class="btn-close"></span>
+                                <span class="btn-minimize"></span>
+                                <span class="btn-maximize"></span>
+                            </div>
+                            <span class="terminal-title">Hash Forge CLI</span>
+                        </div>
+                        <div class="terminal-body">
+                            <div class="terminal-line">
+                                <span class="prompt">$</span>
+                                <span class="command">hash-forge text --input "Hello, World!" --algorithm sha256</span>
+                            </div>
+                            <div class="terminal-line output">
+                                🔧 Hash Forge - Text Hashing<br>
+                                Input: Hello, World!<br>
+                                Algorithm: SHA-256<br>
+                                Hash (hex): dffd6021bb2bd5b0af676290809ec3a53191dd81c7f70a4b28688a362182986f
+                            </div>
+                            <div class="terminal-line">
+                                <span class="prompt">$</span>
+                                <span class="command">hash-forge verify --text "Hello, World!" --algorithm sha256 --expected-hash dffd6021bb2bd5b0af676290809ec3a53191dd81c7f70a4b28688a362182986f</span>
+                            </div>
+                            <div class="terminal-line output success">
+                                ✅ Hash verification PASSED
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2>✨ Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h3>Multiple Algorithms</h3>
+                    <p>SHA-256/512, BLAKE2/3, MD5, SHA-1, Argon2, bcrypt, scrypt - all the algorithms you need</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Dual Interface</h3>
+                    <p>Professional CLI for automation and scripts, intuitive GUI for interactive use</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>High Performance</h3>
+                    <p>Rust implementation with progress tracking and optimized algorithms for maximum speed</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Hash Verification</h3>
+                    <p>Compare computed hashes against expected values with constant-time comparisons</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📁</div>
+                    <h3>Batch Processing</h3>
+                    <p>Process entire directories and generate checksums for multiple files at once</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Security Focused</h3>
+                    <p>Constant-time comparisons, secure salt generation, and memory safety guarantees</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>User Friendly</h3>
+                    <p>Real-time GUI updates, file drag & drop, and copy-to-clipboard functionality</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Cross-Platform</h3>
+                    <p>Works seamlessly on macOS, Linux, and Windows with native performance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Algorithms Section -->
+    <section class="algorithms">
+        <div class="container">
+            <h2>🔐 Supported Algorithms</h2>
+            <div class="algorithms-grid">
+                <div class="algorithm-category">
+                    <h3>Fast Hash Algorithms</h3>
+                    <p>Perfect for file integrity and general purpose hashing</p>
+                    <ul>
+                        <li><strong>BLAKE3</strong> - Modern, fastest performance ⭐</li>
+                        <li><strong>SHA-256</strong> - General purpose, widely supported</li>
+                        <li><strong>SHA-512</strong> - High security, larger output</li>
+                        <li><strong>BLAKE2b/2s</strong> - High performance alternatives</li>
+                        <li><strong>SHA-1</strong> - Legacy compatibility</li>
+                        <li><strong>MD5</strong> - Legacy compatibility</li>
+                    </ul>
+                </div>
+                
+                <div class="algorithm-category">
+                    <h3>Password Hash Algorithms</h3>
+                    <p>Slow by design, perfect for password security</p>
+                    <ul>
+                        <li><strong>Argon2</strong> - Modern, memory-hard ⭐</li>
+                        <li><strong>bcrypt</strong> - Widely supported, moderate security</li>
+                        <li><strong>scrypt</strong> - Memory-hard, good security</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="performance-table">
+                <h3>⚡ Performance Comparison</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Algorithm</th>
+                            <th>Speed</th>
+                            <th>Security</th>
+                            <th>Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>BLAKE3</td>
+                            <td>~3 GB/s</td>
+                            <td>High</td>
+                            <td>File integrity, high performance</td>
+                        </tr>
+                        <tr>
+                            <td>SHA-256</td>
+                            <td>~1.5 GB/s</td>
+                            <td>High</td>
+                            <td>General purpose, compatibility</td>
+                        </tr>
+                        <tr>
+                            <td>Argon2</td>
+                            <td>Configurable</td>
+                            <td>Very High</td>
+                            <td>Password hashing (recommended)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="download">
+        <div class="container">
+            <h2>📥 Download Hash Forge</h2>
+            <p>Get the latest version for your platform</p>
+            
+            <div class="download-options">
+                <div class="download-card">
+                    <div class="platform-icon">🍎</div>
+                    <h3>macOS</h3>
+                    <p>Universal binary for Intel and Apple Silicon</p>
+                    <a href="https://github.com/fra2404/hash-forge/releases/latest/download/hash-forge-macos.dmg" class="btn btn-primary">
+                        Download .dmg
+                    </a>
+                    <div class="alternative-links">
+                        <a href="https://github.com/fra2404/hash-forge/releases/latest/download/hash-forge-macos.tar.gz">
+                            Alternative: .tar.gz
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="download-card">
+                    <div class="platform-icon">🐧</div>
+                    <h3>Linux</h3>
+                    <p>Compatible with most distributions</p>
+                    <a href="https://github.com/fra2404/hash-forge/releases/latest/download/hash-forge-linux.tar.gz" class="btn btn-primary">
+                        Download .tar.gz
+                    </a>
+                    <div class="alternative-links">
+                        <a href="https://github.com/fra2404/hash-forge/releases/latest/download/hash-forge-linux.deb">
+                            Alternative: .deb
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="download-card">
+                    <div class="platform-icon">🪟</div>
+                    <h3>Windows</h3>
+                    <p>Windows 10/11 compatible</p>
+                    <a href="https://github.com/fra2404/hash-forge/releases/latest/download/hash-forge-windows.zip" class="btn btn-primary">
+                        Download .zip
+                    </a>
+                    <div class="alternative-links">
+                        <a href="https://github.com/fra2404/hash-forge/releases/latest/download/hash-forge-windows.msi">
+                            Alternative: .msi
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="install-methods">
+                <h3>Alternative Installation Methods</h3>
+                <div class="install-grid">
+                    <div class="install-method">
+                        <h4>🍺 Homebrew (macOS/Linux)</h4>
+                        <div class="code-block">
+                            <code>brew tap fra2404/hash-forge<br>brew install hash-forge</code>
+                        </div>
+                        <span class="status coming-soon">Coming Soon</span>
+                    </div>
+                    
+                    <div class="install-method">
+                        <h4>📦 Cargo (Rust)</h4>
+                        <div class="code-block">
+                            <code>cargo install hash-forge</code>
+                        </div>
+                        <span class="status coming-soon">Coming Soon</span>
+                    </div>
+                    
+                    <div class="install-method">
+                        <h4>🔧 From Source</h4>
+                        <div class="code-block">
+                            <code>git clone https://github.com/fra2404/hash-forge.git<br>cd hash-forge<br>cargo build --release</code>
+                        </div>
+                        <span class="status available">Available Now</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Usage Examples -->
+    <section class="usage">
+        <div class="container">
+            <h2>💻 Usage Examples</h2>
+            
+            <div class="usage-tabs">
+                <button class="tab-button active" onclick="showTab('cli')">CLI Examples</button>
+                <button class="tab-button" onclick="showTab('gui')">GUI Interface</button>
+            </div>
+            
+            <div id="cli-tab" class="tab-content active">
+                <h3>Command Line Interface</h3>
+                <div class="examples-grid">
+                    <div class="example">
+                        <h4>Text Hashing</h4>
+                        <div class="code-block">
+                            <code># Basic SHA-256 hashing<br>
+hash-forge text --input "Hello, World!" --algorithm sha256<br><br>
+# BLAKE3 with base64 output<br>
+hash-forge text -i "Hello, World!" -a blake3 -f base64<br><br>
+# Password hashing with Argon2<br>
+hash-forge text -i "mypassword" -a argon2 --salt "customsalt"</code>
+                        </div>
+                    </div>
+                    
+                    <div class="example">
+                        <h4>File Hashing</h4>
+                        <div class="code-block">
+                            <code># Hash a document<br>
+hash-forge file --path document.pdf --algorithm sha256<br><br>
+# High-speed hashing with BLAKE3<br>
+hash-forge file -p largefile.zip -a blake3<br><br>
+# Batch process directory<br>
+hash-forge batch --directory ./documents -a sha256</code>
+                        </div>
+                    </div>
+                    
+                    <div class="example">
+                        <h4>Hash Verification</h4>
+                        <div class="code-block">
+                            <code># Verify text hash<br>
+hash-forge verify --text "Hello, World!" \<br>
+  --algorithm sha256 \<br>
+  --expected-hash dffd6021bb2bd5b0af676290809ec3a53191dd81c7f70a4b28688a362182986f<br><br>
+# Verify file integrity<br>
+hash-forge verify --file document.pdf \<br>
+  --algorithm sha256 \<br>
+  --expected-hash expected_hash_here</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="gui-tab" class="tab-content">
+                <h3>Graphical User Interface</h3>
+                <div class="gui-features">
+                    <div class="gui-feature">
+                        <h4>📝 Text Input Mode</h4>
+                        <p>Real-time hash computation as you type with instant results and copy-to-clipboard functionality.</p>
+                    </div>
+                    <div class="gui-feature">
+                        <h4>📄 File Input Mode</h4>
+                        <p>Drag & drop file support with progress tracking for large files and detailed performance metrics.</p>
+                    </div>
+                    <div class="gui-feature">
+                        <h4>⚙️ Algorithm Selection</h4>
+                        <p>Easy algorithm selection with recommendations and security warnings for legacy algorithms.</p>
+                    </div>
+                    <div class="gui-feature">
+                        <h4>🔍 Verification Mode</h4>
+                        <p>Built-in hash verification with clear success/failure indicators and error messages.</p>
+                    </div>
+                </div>
+                <div class="gui-launch">
+                    <p>Launch the GUI application:</p>
+                    <div class="code-block">
+                        <code>hash-forge-gui</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>🔧 Hash Forge</h3>
+                    <p>Professional hash generator and verifier built with Rust</p>
+                    <div class="footer-badges">
+                        <img src="https://img.shields.io/github/stars/fra2404/hash-forge?style=social" alt="GitHub Stars">
+                        <img src="https://img.shields.io/github/forks/fra2404/hash-forge?style=social" alt="GitHub Forks">
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#download">Download</a></li>
+                        <li><a href="https://github.com/fra2404/hash-forge" target="_blank">GitHub Repository</a></li>
+                        <li><a href="https://github.com/fra2404/hash-forge/releases" target="_blank">Releases</a></li>
+                        <li><a href="https://github.com/fra2404/hash-forge/issues" target="_blank">Report Issues</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Documentation</h4>
+                    <ul>
+                        <li><a href="https://github.com/fra2404/hash-forge/blob/main/README.md" target="_blank">User Guide</a></li>
+                        <li><a href="https://github.com/fra2404/hash-forge/blob/main/EXAMPLES.md" target="_blank">Examples</a></li>
+                        <li><a href="https://github.com/fra2404/hash-forge/blob/main/CONTRIBUTING.md" target="_blank">Contributing</a></li>
+                        <li><a href="https://github.com/fra2404/hash-forge/blob/main/LICENSE" target="_blank">License</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="https://ko-fi.com/fra2404" target="_blank">☕ Support Development</a></li>
+                        <li><a href="mailto:fra2404@users.noreply.github.com">📧 Contact</a></li>
+                        <li><a href="https://github.com/fra2404" target="_blank">👨‍💻 Developer</a></li>
+                        <li><a href="https://twitter.com/fra2404" target="_blank">🐦 Twitter</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Hash Forge. Made with ❤️ and ⚡ by <a href="https://github.com/fra2404" target="_blank">Francesco</a>. Licensed under MIT.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
