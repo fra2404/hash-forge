@@ -169,7 +169,11 @@
                         <li><strong>BLAKE3</strong> - Modern, fastest performance ⭐</li>
                         <li><strong>SHA-256</strong> - General purpose, widely supported</li>
                         <li><strong>SHA-512</strong> - High security, larger output</li>
+                        <li><strong>SHA3-256</strong> - Modern Keccak-based alternative 🆕</li>
+                        <li><strong>SHA3-512</strong> - High security SHA-3 standard 🆕</li>
+                        <li><strong>SHAKE128/256</strong> - Extendable output functions 🆕</li>
                         <li><strong>BLAKE2b/2s</strong> - High performance alternatives</li>
+                        <li><strong>xxHash3</strong> - Ultra-fast non-cryptographic 🆕</li>
                         <li><strong>SHA-1</strong> - Legacy compatibility</li>
                         <li><strong>MD5</strong> - Legacy compatibility</li>
                     </ul>
@@ -182,6 +186,17 @@
                         <li><strong>Argon2</strong> - Modern, memory-hard ⭐</li>
                         <li><strong>bcrypt</strong> - Widely supported, moderate security</li>
                         <li><strong>scrypt</strong> - Memory-hard, good security</li>
+                    </ul>
+                </div>
+                
+                <div class="algorithm-category">
+                    <h3>HMAC Authentication 🆕</h3>
+                    <p>Keyed-hash message authentication codes</p>
+                    <ul>
+                        <li><strong>HMAC-SHA256</strong> - Most common, highly secure</li>
+                        <li><strong>HMAC-SHA3-256</strong> - Modern Keccak-based</li>
+                        <li><strong>HMAC-SHA512</strong> - Maximum security</li>
+                        <li><strong>HMAC-SHA1</strong> - Legacy compatibility</li>
                     </ul>
                 </div>
             </div>
@@ -205,10 +220,28 @@
                             <td>File integrity, high performance</td>
                         </tr>
                         <tr>
+                            <td>xxHash3</td>
+                            <td>~10 GB/s</td>
+                            <td>Non-crypto</td>
+                            <td>Ultra-fast checksums, non-security</td>
+                        </tr>
+                        <tr>
+                            <td>SHA3-256</td>
+                            <td>~800 MB/s</td>
+                            <td>High</td>
+                            <td>Modern alternative to SHA-256</td>
+                        </tr>
+                        <tr>
                             <td>SHA-256</td>
                             <td>~1.5 GB/s</td>
                             <td>High</td>
                             <td>General purpose, compatibility</td>
+                        </tr>
+                        <tr>
+                            <td>SHAKE128</td>
+                            <td>~700 MB/s</td>
+                            <td>High</td>
+                            <td>Extendable output, flexible length</td>
                         </tr>
                         <tr>
                             <td>Argon2</td>
@@ -311,8 +344,14 @@
                         <div class="code-block">
                             <code># Basic SHA-256 hashing<br>
 hash-forge text --input "Hello, World!" --algorithm sha256<br><br>
+# Modern SHA3-256 hashing 🆕<br>
+hash-forge text -i "Hello, World!" -a sha3-256<br><br>
+# SHAKE128 with extendable output 🆕<br>
+hash-forge text -i "Hello, World!" -a shake128<br><br>
 # BLAKE3 with base64 output<br>
 hash-forge text -i "Hello, World!" -a blake3 -f base64<br><br>
+# Ultra-fast xxHash3 for checksums 🆕<br>
+hash-forge text -i "Hello, World!" -a xxh3<br><br>
 # Password hashing with Argon2<br>
 hash-forge text -i "mypassword" -a argon2 --salt "customsalt"</code>
                         </div>
@@ -341,6 +380,23 @@ hash-forge verify --text "Hello, World!" \<br>
 hash-forge verify --file document.pdf \<br>
   --algorithm sha256 \<br>
   --expected-hash expected_hash_here</code>
+                        </div>
+                    </div>
+                    
+                    <div class="example">
+                        <h4>HMAC Authentication 🆕</h4>
+                        <div class="code-block">
+                            <code># Compute HMAC<br>
+hash-forge hmac --text "Secret message" \<br>
+  --key "my_secret_key" --algorithm sha256<br><br>
+# Verify HMAC<br>
+hash-forge verify-hmac --text "Secret message" \<br>
+  --key "my_secret_key" \<br>
+  --expected-hmac computed_hmac_here \<br>
+  --algorithm sha256<br><br>
+# HMAC with SHA3-256<br>
+hash-forge hmac --file sensitive.json \<br>
+  --key "api_key" --algorithm sha3-256</code>
                         </div>
                     </div>
                 </div>

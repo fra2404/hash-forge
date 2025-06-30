@@ -85,4 +85,50 @@ pub enum Commands {
         #[arg(short = 'f', long, default_value = "hex")]
         output_format: OutputFormat,
     },
+
+    /// Compute HMAC (Keyed-Hash Message Authentication Code)
+    Hmac {
+        /// Text to compute HMAC for (mutually exclusive with --file)
+        #[arg(short = 't', long, group = "input")]
+        text: Option<String>,
+
+        /// File to compute HMAC for (mutually exclusive with --text)
+        #[arg(short = 'f', long, group = "input")]
+        file: Option<PathBuf>,
+
+        /// HMAC key
+        #[arg(short, long)]
+        key: String,
+
+        /// Hash algorithm to use for HMAC
+        #[arg(short, long, default_value = "sha256")]
+        algorithm: HashAlgorithm,
+
+        /// Output format
+        #[arg(short = 'o', long, default_value = "hex")]
+        output_format: OutputFormat,
+    },
+
+    /// Verify HMAC against expected value
+    VerifyHmac {
+        /// Text to verify HMAC for (mutually exclusive with --file)
+        #[arg(short = 't', long, group = "input")]
+        text: Option<String>,
+
+        /// File to verify HMAC for (mutually exclusive with --text)
+        #[arg(short = 'f', long, group = "input")]
+        file: Option<PathBuf>,
+
+        /// HMAC key
+        #[arg(short, long)]
+        key: String,
+
+        /// Expected HMAC value
+        #[arg(short, long)]
+        expected_hmac: String,
+
+        /// Hash algorithm used for HMAC
+        #[arg(short, long, default_value = "sha256")]
+        algorithm: HashAlgorithm,
+    },
 }
