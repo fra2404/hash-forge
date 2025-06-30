@@ -27,6 +27,14 @@ jobs:
         with:
           enablement: true
 
+      - name: Copy favicon
+        run: |
+          cp assets/image.png docs/favicon.png
+          # Also create a .ico version if needed for broader compatibility
+          if command -v convert &> /dev/null; then
+            convert assets/image.png docs/favicon.ico
+          fi
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

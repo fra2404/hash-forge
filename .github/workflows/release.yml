@@ -19,7 +19,7 @@ jobs:
           targets: x86_64-apple-darwin,aarch64-apple-darwin
 
       - name: Cache cargo dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/registry
@@ -160,13 +160,13 @@ jobs:
           tar -czf hash-forge-cli-macos.tar.gz hash-forge-cli/
 
       - name: Upload DMG artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: hash-forge-dmg
           path: Hash-Forge.dmg
 
       - name: Upload CLI artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: hash-forge-cli-macos
           path: hash-forge-cli-macos.tar.gz
@@ -181,7 +181,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Cache cargo dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/registry
@@ -204,7 +204,7 @@ jobs:
           tar -czf hash-forge-linux.tar.gz hash-forge-linux/
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: hash-forge-linux
           path: hash-forge-linux.tar.gz
@@ -219,7 +219,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Cache cargo dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/registry
@@ -242,7 +242,7 @@ jobs:
           Compress-Archive -Path hash-forge-windows -DestinationPath hash-forge-windows.zip
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: hash-forge-windows
           path: hash-forge-windows.zip
@@ -256,7 +256,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
