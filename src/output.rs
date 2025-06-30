@@ -1,8 +1,9 @@
 use clap::ValueEnum;
 use std::fmt;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum, Default)]
 pub enum OutputFormat {
+    #[default]
     #[value(name = "hex")]
     Hex,
     #[value(name = "base64")]

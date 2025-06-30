@@ -29,8 +29,8 @@ fn load_icon() -> egui::IconData {
             
             // Create a hash/grid pattern
             let is_grid = (x % 8 == 0 || x % 8 == 1) || (y % 8 == 0 || y % 8 == 1);
-            let is_cross = (x >= 10 && x <= 13) || (y >= 10 && y <= 13) || 
-                          (x >= 18 && x <= 21) || (y >= 18 && y <= 21);
+            let is_cross = (10..=13).contains(&x) || (10..=13).contains(&y) || 
+                          (18..=21).contains(&x) || (18..=21).contains(&y);
             
             if is_grid || is_cross {
                 pixels[idx] = 100;     // R

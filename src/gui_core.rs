@@ -35,28 +35,11 @@ pub struct HashForgeApp {
     pub forge: HashForge,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum InputMode {
+    #[default]
     Text,
     File,
-}
-
-impl Default for InputMode {
-    fn default() -> Self {
-        InputMode::Text
-    }
-}
-
-impl Default for HashAlgorithm {
-    fn default() -> Self {
-        HashAlgorithm::Sha256
-    }
-}
-
-impl Default for OutputFormat {
-    fn default() -> Self {
-        OutputFormat::Hex
-    }
 }
 
 impl HashForgeApp {
@@ -124,7 +107,7 @@ impl HashForgeApp {
                 }
             }
             Err(e) => {
-                self.hash_result = Some(format!("Error: {}", e));
+                self.hash_result = Some(format!("Error: {e}"));
             }
         }
     }
@@ -140,14 +123,14 @@ impl HashForgeApp {
     /// Get formatted computation time
     pub fn formatted_computation_time(&self) -> String {
         self.computation_time
-            .map(|duration| crate::utils::format_duration(duration))
+            .map(crate::utils::format_duration)
             .unwrap_or_default()
     }
     
     /// Get formatted file size
     pub fn formatted_file_size(&self) -> String {
         self.file_size
-            .map(|size| crate::utils::format_file_size(size))
+            .map(crate::utils::format_file_size)
             .unwrap_or_default()
     }
     
@@ -169,7 +152,7 @@ impl HashForgeApp {
         if let Some(ref result) = self.hash_result {
             // Note: Clipboard functionality would require additional dependencies
             // For now, we'll just indicate that the text should be copied
-            println!("Copy to clipboard: {}", result);
+            println!("Copy to clipboard: {result}");
         }
     }
 }
@@ -238,7 +221,7 @@ impl eframe::App for HashForgeApp {
                         .selected_text(format!("{}", self.selected_algorithm))
                         .show_ui(ui, |ui| {
                             for &algorithm in &AVAILABLE_ALGORITHMS {
-                                let response = ui.selectable_value(&mut self.selected_algorithm, algorithm, format!("{}", algorithm));
+                                let response = ui.selectable_value(&mut self.selected_algorithm, algorithm, format!("{algorithm}"));
                                 if response.clicked() && self.auto_compute && self.can_compute() {
                                     self.clear_results();
                                     self.compute_hash();
@@ -253,7 +236,7 @@ impl eframe::App for HashForgeApp {
                         .selected_text(format!("{}", self.output_format))
                         .show_ui(ui, |ui| {
                             for &format in &AVAILABLE_OUTPUT_FORMATS {
-                                let response = ui.selectable_value(&mut self.output_format, format, format!("{}", format));
+                                let response = ui.selectable_value(&mut self.output_format, format, format!("{format}"));
                                 if response.clicked() && self.auto_compute && self.can_compute() {
                                     self.clear_results();
                                     self.compute_hash();
@@ -369,13 +352,13 @@ impl eframe::App for HashForgeApp {
                     });
                     
                     // Performance info
-                    if let Some(_) = self.computation_time {
+                    if self.computation_time.is_some() {
                         ui.separator();
                         ui.horizontal(|ui| {
                             ui.label("⏱️ Time:");
                             ui.label(self.formatted_computation_time());
                             
-                            if let Some(_) = self.file_size {
+                            if self.file_size.is_some() {
                                 ui.separator();
                                 ui.label("📏 Size:");
                                 ui.label(self.formatted_file_size());

@@ -1,13 +1,14 @@
 use clap::ValueEnum;
 use std::fmt;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum, Default)]
 pub enum HashAlgorithm {
     // Fast cryptographic hashes (for files)
     #[value(name = "md5")]
     Md5,
     #[value(name = "sha1")]
     Sha1,
+    #[default]
     #[value(name = "sha256")]
     Sha256,
     #[value(name = "sha512")]
