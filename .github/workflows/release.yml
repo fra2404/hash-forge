@@ -32,7 +32,12 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Install create-dmg
-        run: npm install -g create-dmg
+        run: |
+          # Install Node.js and create-dmg
+          npm install -g create-dmg
+          # Verify installation
+          which create-dmg || echo "create-dmg not found in PATH"
+          create-dmg --version || echo "create-dmg version check failed"
 
       - name: Build x86_64 binary
         run: |
@@ -155,6 +160,17 @@ jobs:
             hdiutil create -volname "Hash Forge" -srcfolder dmg-contents -ov -format UDZO Hash-Forge.dmg
           fi
 
+      - name: Verify DMG creation
+        run: |
+          ls -la *.dmg || echo "No DMG files found"
+          if [ -f "Hash-Forge.dmg" ]; then
+            echo "✅ DMG created successfully"
+            ls -lh Hash-Forge.dmg
+          else
+            echo "❌ DMG creation failed"
+            exit 1
+          fi
+
       - name: Create standalone CLI archive
         run: |
           mkdir -p hash-forge-cli
@@ -168,6 +184,7 @@ jobs:
         with:
           name: hash-forge-dmg
           path: Hash-Forge.dmg
+          if-no-files-found: error
 
       - name: Upload CLI artifact
         uses: actions/upload-artifact@v4
@@ -262,8 +279,19 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
 
-      - name: List downloaded files
-        run: find . -type f -name "*.dmg" -o -name "*.tar.gz" -o -name "*.zip" | head -20
+      - name: Organize downloaded files
+        run: |
+          echo "📁 Downloaded artifact structure:"
+          find . -type f -name "*.dmg" -o -name "*.tar.gz" -o -name "*.zip" | head -20
+          
+          # Move files to root directory with correct names
+          [ -f "hash-forge-dmg/Hash-Forge.dmg" ] && mv "hash-forge-dmg/Hash-Forge.dmg" . || echo "❌ DMG not found"
+          [ -f "hash-forge-cli-macos/hash-forge-cli-macos.tar.gz" ] && mv "hash-forge-cli-macos/hash-forge-cli-macos.tar.gz" . || echo "❌ macOS CLI not found"
+          [ -f "hash-forge-linux/hash-forge-linux.tar.gz" ] && mv "hash-forge-linux/hash-forge-linux.tar.gz" . || echo "❌ Linux archive not found"
+          [ -f "hash-forge-windows/hash-forge-windows.zip" ] && mv "hash-forge-windows/hash-forge-windows.zip" . || echo "❌ Windows archive not found"
+          
+          echo "📦 Final files for release:"
+          ls -la *.dmg *.tar.gz *.zip 2>/dev/null || echo "❌ Some files missing"
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
