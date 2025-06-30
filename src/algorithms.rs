@@ -19,7 +19,7 @@ pub enum HashAlgorithm {
     Blake2s,
     #[value(name = "blake3")]
     Blake3,
-    
+
     // Slow password hashing algorithms
     #[value(name = "bcrypt")]
     Bcrypt,
@@ -49,14 +49,17 @@ impl fmt::Display for HashAlgorithm {
 impl HashAlgorithm {
     /// Returns true if this algorithm is designed for password hashing (slow)
     pub fn is_password_hash(&self) -> bool {
-        matches!(self, HashAlgorithm::Bcrypt | HashAlgorithm::Scrypt | HashAlgorithm::Argon2)
+        matches!(
+            self,
+            HashAlgorithm::Bcrypt | HashAlgorithm::Scrypt | HashAlgorithm::Argon2
+        )
     }
-    
+
     /// Returns true if this algorithm is fast and suitable for file hashing
     pub fn is_fast_hash(&self) -> bool {
         !self.is_password_hash()
     }
-    
+
     /// Returns the recommended use case for this algorithm
     pub fn recommended_use(&self) -> &'static str {
         match self {
@@ -72,7 +75,7 @@ impl HashAlgorithm {
             HashAlgorithm::Argon2 => "Password hashing (recommended, modern)",
         }
     }
-    
+
     /// Returns the typical output size in bytes
     pub fn output_size(&self) -> usize {
         match self {

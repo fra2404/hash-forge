@@ -30,29 +30,29 @@ impl HashResult {
     pub fn new(bytes: Vec<u8>, algorithm: crate::algorithms::HashAlgorithm) -> Self {
         Self { bytes, algorithm }
     }
-    
+
     /// Convert hash to hexadecimal string
     pub fn to_hex(&self) -> String {
         hex::encode(&self.bytes)
     }
-    
+
     /// Convert hash to base64 string
     pub fn to_base64(&self) -> String {
         use base64::Engine;
         base64::engine::general_purpose::STANDARD.encode(&self.bytes)
     }
-    
+
     /// Get raw bytes
     pub fn to_bytes(&self) -> &[u8] {
         &self.bytes
     }
-    
+
     /// Compare with another hash result in constant time
     pub fn constant_time_eq(&self, other: &[u8]) -> bool {
         if self.bytes.len() != other.len() {
             return false;
         }
-        
+
         let mut result = 0u8;
         for (a, b) in self.bytes.iter().zip(other.iter()) {
             result |= a ^ b;

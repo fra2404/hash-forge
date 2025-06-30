@@ -4,7 +4,7 @@ use rand::Rng;
 pub fn generate_salt(length: usize) -> String {
     let charset: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let mut rng = rand::thread_rng();
-    
+
     (0..length)
         .map(|_| {
             let idx = rng.gen_range(0..charset.len());
@@ -18,12 +18,12 @@ pub fn format_file_size(size: u64) -> String {
     const UNITS: &[&str] = &["B", "KB", "MB", "GB", "TB"];
     let mut size = size as f64;
     let mut unit_index = 0;
-    
+
     while size >= 1024.0 && unit_index < UNITS.len() - 1 {
         size /= 1024.0;
         unit_index += 1;
     }
-    
+
     if unit_index == 0 {
         format!("{} {}", size as u64, UNITS[unit_index])
     } else {
@@ -38,7 +38,7 @@ pub fn format_duration(duration: std::time::Duration) -> String {
     let minutes = (total_seconds % 3600) / 60;
     let seconds = total_seconds % 60;
     let millis = duration.subsec_millis();
-    
+
     if hours > 0 {
         format!("{hours}h {minutes}m {seconds}s")
     } else if minutes > 0 {
@@ -53,17 +53,17 @@ pub fn format_duration(duration: std::time::Duration) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn test_generate_salt() {
         let salt1 = generate_salt(16);
         let salt2 = generate_salt(16);
-        
+
         assert_eq!(salt1.len(), 16);
         assert_eq!(salt2.len(), 16);
         assert_ne!(salt1, salt2); // Should be different
     }
-    
+
     #[test]
     fn test_format_file_size() {
         assert_eq!(format_file_size(512), "512 B");

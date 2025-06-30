@@ -19,44 +19,44 @@ fn main() -> Result<()> {
         } => {
             let forge = HashForge::new();
             let result = forge.hash_text(&input, algorithm, salt.as_deref(), iterations)?;
-            
+
             let formatted = match output_format {
                 OutputFormat::Hex => result.to_hex(),
                 OutputFormat::Base64 => result.to_base64(),
             };
-            
+
             println!("🔧 Hash Forge - Text Hashing");
-            println!("Input: {}", input);
-            println!("Algorithm: {}", algorithm);
+            println!("Input: {input}");
+            println!("Algorithm: {algorithm}");
             if let Some(salt) = salt {
-                println!("Salt: {}", salt);
+                println!("Salt: {salt}");
             }
             if let Some(iter) = iterations {
-                println!("Iterations: {}", iter);
+                println!("Iterations: {iter}");
             }
-            println!("Hash ({}): {}", output_format, formatted);
+            println!("Hash ({output_format}): {formatted}");
         }
-        
+
         Commands::File {
             path,
             algorithm,
             output_format,
         } => {
             let forge = HashForge::new();
-            
+
             println!("🔧 Hash Forge - File Hashing");
             println!("File: {}", path.display());
-            println!("Algorithm: {}", algorithm);
-            
+            println!("Algorithm: {algorithm}");
+
             let result = forge.hash_file(&path, algorithm)?;
             let formatted = match output_format {
                 OutputFormat::Hex => result.to_hex(),
                 OutputFormat::Base64 => result.to_base64(),
             };
-            
-            println!("Hash ({}): {}", output_format, formatted);
+
+            println!("Hash ({output_format}): {formatted}");
         }
-        
+
         Commands::Verify {
             text,
             file,
@@ -64,7 +64,7 @@ fn main() -> Result<()> {
             algorithm,
         } => {
             let forge = HashForge::new();
-            
+
             let computed_hash = if let Some(text_value) = text {
                 forge.hash_text(&text_value, algorithm, None, None)?
             } else if let Some(file_path) = file {
@@ -72,14 +72,14 @@ fn main() -> Result<()> {
             } else {
                 anyhow::bail!("Either --text or --file must be specified for verification");
             };
-            
+
             let is_valid = forge.verify_hash(&computed_hash, &expected_hash)?;
-            
+
             println!("🔧 Hash Forge - Hash Verification");
-            println!("Algorithm: {}", algorithm);
-            println!("Expected: {}", expected_hash);
+            println!("Algorithm: {algorithm}");
+            println!("Expected: {expected_hash}");
             println!("Computed: {}", computed_hash.to_hex());
-            
+
             if is_valid {
                 println!("✅ Hash verification PASSED");
             } else {
@@ -87,14 +87,18 @@ fn main() -> Result<()> {
                 std::process::exit(1);
             }
         }
-        
-        Commands::Batch { directory, algorithm, output_format } => {
+
+        Commands::Batch {
+            directory,
+            algorithm,
+            output_format,
+        } => {
             let forge = HashForge::new();
-            
+
             println!("🔧 Hash Forge - Batch Processing");
             println!("Directory: {}", directory.display());
-            println!("Algorithm: {}", algorithm);
-            
+            println!("Algorithm: {algorithm}");
+
             forge.batch_process_directory(&directory, algorithm, output_format)?;
         }
     }
