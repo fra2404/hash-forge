@@ -117,7 +117,7 @@ fn main() -> Result<()> {
             let data = if let Some(ref text_value) = text {
                 text_value.as_bytes().to_vec()
             } else if let Some(ref file_path) = file {
-                std::fs::read(&file_path)?
+                std::fs::read(file_path)?
             } else {
                 anyhow::bail!("Either --text or --file must be specified for HMAC");
             };
@@ -153,7 +153,7 @@ fn main() -> Result<()> {
             let data = if let Some(ref text_value) = text {
                 text_value.as_bytes().to_vec()
             } else if let Some(ref file_path) = file {
-                std::fs::read(&file_path)?
+                std::fs::read(file_path)?
             } else {
                 anyhow::bail!("Either --text or --file must be specified for HMAC verification");
             };
@@ -162,12 +162,13 @@ fn main() -> Result<()> {
             let expected_bytes = hex::decode(&expected_hmac)
                 .map_err(|_| anyhow::anyhow!("Invalid hex format for expected HMAC"))?;
 
-            let is_valid = HmacProcessor::verify_hmac(&data, key.as_bytes(), &expected_bytes, algorithm)?;
+            let is_valid =
+                HmacProcessor::verify_hmac(&data, key.as_bytes(), &expected_bytes, algorithm)?;
 
             println!("🔧 Hash Forge - HMAC Verification");
             println!("Algorithm: {algorithm}");
             println!("Expected: {expected_hmac}");
-            
+
             let computed = HmacProcessor::compute_hmac(&data, key.as_bytes(), algorithm)?;
             println!("Computed: {}", computed.to_hex());
 

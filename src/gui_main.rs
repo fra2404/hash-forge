@@ -1,4 +1,4 @@
-use hash_forge::gui_core::HashForgeApp;
+use hash_forge::gui::HashForgeApp;
 
 fn main() -> Result<(), eframe::Error> {
     let native_options = eframe::NativeOptions {

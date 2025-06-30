@@ -104,18 +104,26 @@ impl HashForge {
             // SHAKE functions (extendable output)
             HashAlgorithm::Shake128 => {
                 use sha3::digest::{ExtendableOutput, Update};
+                use std::io::Read;
                 let mut hasher = Shake128::default();
                 hasher.update(bytes);
                 let mut output = vec![0u8; 32]; // Default 32 bytes
-                hasher.finalize_xof().read(&mut output).expect("SHAKE128 read failed");
+                hasher
+                    .finalize_xof()
+                    .read_exact(&mut output)
+                    .expect("SHAKE128 read failed");
                 Ok(HashResult::new(output, algorithm))
             }
             HashAlgorithm::Shake256 => {
                 use sha3::digest::{ExtendableOutput, Update};
+                use std::io::Read;
                 let mut hasher = Shake256::default();
                 hasher.update(bytes);
                 let mut output = vec![0u8; 32]; // Default 32 bytes
-                hasher.finalize_xof().read(&mut output).expect("SHAKE256 read failed");
+                hasher
+                    .finalize_xof()
+                    .read_exact(&mut output)
+                    .expect("SHAKE256 read failed");
                 Ok(HashResult::new(output, algorithm))
             }
 
@@ -323,11 +331,15 @@ impl HashForge {
                 }
 
                 let mut output = vec![0u8; 32]; // Default 32 bytes
-                hasher.finalize_xof().read(&mut output).expect("SHAKE128 read failed");
+                hasher
+                    .finalize_xof()
+                    .read_exact(&mut output)
+                    .expect("SHAKE128 read failed");
                 Ok(HashResult::new(output, algorithm))
             }
             HashAlgorithm::Shake256 => {
                 use sha3::digest::{ExtendableOutput, Update};
+                use std::io::Read;
                 let mut hasher = Shake256::default();
                 let mut buffer = [0; 8192];
                 let mut total_read = 0u64;
@@ -351,7 +363,10 @@ impl HashForge {
                 }
 
                 let mut output = vec![0u8; 32]; // Default 32 bytes
-                hasher.finalize_xof().read(&mut output).expect("SHAKE256 read failed");
+                hasher
+                    .finalize_xof()
+                    .read_exact(&mut output)
+                    .expect("SHAKE256 read failed");
                 Ok(HashResult::new(output, algorithm))
             }
 

@@ -11,11 +11,7 @@ pub struct HmacProcessor;
 
 impl HmacProcessor {
     /// Compute HMAC with the specified algorithm and key
-    pub fn compute_hmac(
-        data: &[u8],
-        key: &[u8],
-        algorithm: HashAlgorithm,
-    ) -> Result<HashResult> {
+    pub fn compute_hmac(data: &[u8], key: &[u8], algorithm: HashAlgorithm) -> Result<HashResult> {
         match algorithm {
             HashAlgorithm::Sha1 => {
                 let mut mac = Hmac::<Sha1>::new_from_slice(key)
@@ -84,7 +80,7 @@ impl HmacProcessor {
         algorithm: HashAlgorithm,
     ) -> Result<bool> {
         let computed = Self::compute_hmac(data, key, algorithm)?;
-        
+
         // Constant-time comparison to prevent timing attacks
         Ok(constant_time_eq(&computed.bytes, expected_hmac))
     }
@@ -125,7 +121,7 @@ mod tests {
     fn test_hmac_sha256() {
         let data = b"Hello, World!";
         let key = b"secret_key";
-        
+
         let result = HmacProcessor::compute_hmac(data, key, HashAlgorithm::Sha256).unwrap();
         assert_eq!(result.bytes.len(), 32); // SHA-256 HMAC output size
     }
@@ -134,10 +130,12 @@ mod tests {
     fn test_hmac_verification() {
         let data = b"test data";
         let key = b"test_key";
-        
+
         let hmac_result = HmacProcessor::compute_hmac(data, key, HashAlgorithm::Sha256).unwrap();
-        let is_valid = HmacProcessor::verify_hmac(data, key, &hmac_result.bytes, HashAlgorithm::Sha256).unwrap();
-        
+        let is_valid =
+            HmacProcessor::verify_hmac(data, key, &hmac_result.bytes, HashAlgorithm::Sha256)
+                .unwrap();
+
         assert!(is_valid);
     }
 

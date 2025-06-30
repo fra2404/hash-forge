@@ -13,7 +13,7 @@ pub enum HashAlgorithm {
     Sha256,
     #[value(name = "sha512")]
     Sha512,
-    
+
     // SHA-3 family (Keccak-based)
     #[value(name = "sha3-224")]
     Sha3_224,
@@ -23,13 +23,13 @@ pub enum HashAlgorithm {
     Sha3_384,
     #[value(name = "sha3-512")]
     Sha3_512,
-    
+
     // SHAKE functions (extendable output)
     #[value(name = "shake128")]
     Shake128,
     #[value(name = "shake256")]
     Shake256,
-    
+
     // BLAKE family
     #[value(name = "blake2b")]
     Blake2b,
@@ -37,7 +37,7 @@ pub enum HashAlgorithm {
     Blake2s,
     #[value(name = "blake3")]
     Blake3,
-    
+
     // High performance non-cryptographic hashes
     #[value(name = "xxh32")]
     XxHash32,
@@ -133,7 +133,7 @@ impl HashAlgorithm {
             HashAlgorithm::Sha3_512 => 64,
             HashAlgorithm::Shake128 => 32, // Default size, configurable
             HashAlgorithm::Shake256 => 32, // Default size, configurable
-            HashAlgorithm::Blake3 => 32, // Default size, configurable
+            HashAlgorithm::Blake3 => 32,   // Default size, configurable
             HashAlgorithm::XxHash32 => 4,
             HashAlgorithm::XxHash64 => 8,
             HashAlgorithm::XxHash3 => 8, // Default for XXH3_64
