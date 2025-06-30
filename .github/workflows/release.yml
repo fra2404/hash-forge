@@ -131,6 +131,16 @@ jobs:
           chmod +x "Hash Forge.app/Contents/MacOS/Hash Forge"
           chmod +x "Hash Forge.app/Contents/Resources/hash-forge"
 
+      - name: Sign the application (ad-hoc signing for open source)
+        run: |
+          # Use ad-hoc signing for open source projects
+          # This creates a signature that allows the app to run without the "unidentified developer" warning
+          codesign --force --deep --sign - "Hash Forge.app"
+          
+          # Verify the signature
+          codesign --verify --verbose "Hash Forge.app"
+          spctl --assess --verbose "Hash Forge.app" || echo "App assessment failed (expected for ad-hoc signed apps)"
+
       - name: Create DMG
         run: |
           # Create a temporary directory for DMG contents

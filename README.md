@@ -54,6 +54,24 @@ Get the latest release from [GitHub Releases](https://github.com/fra2404/hash-fo
 
 > **Automatic Releases**: New releases are automatically created when tags are pushed to GitHub. The macOS `.dmg` includes a beautifully packaged app with icon and drag-to-Applications installer.
 
+### 🔒 macOS Security Notice
+
+On macOS, you may see a warning: *"Apple could not verify 'Hash Forge' is free of malware"*. This is normal for open-source applications that aren't distributed through the Mac App Store.
+
+**To run Hash Forge safely:**
+
+1. **Right-click** the app and select "Open" (instead of double-clicking)
+2. Click "Open" in the dialog that appears
+3. The app will run and be remembered as safe for future use
+
+**Alternative method:**
+```bash
+# Allow the app to run via terminal
+xattr -d com.apple.quarantine "/Applications/Hash Forge.app"
+```
+
+> This is a standard procedure for all open-source macOS applications. Hash Forge is built from public source code and includes ad-hoc code signing for additional security.
+
 ## 💻 Usage
 
 ### CLI Interface
