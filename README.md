@@ -11,13 +11,14 @@
 
 ## ✨ Features
 
-- 🔐 **Multiple algorithms**: SHA-256/512, BLAKE2/3, MD5, SHA-1, Argon2, bcrypt, scrypt
-- 📱 **Dual interface**: Both CLI and GUI modes available
-- ⚡ **High performance**: Rust implementation with progress tracking
-- 🔍 **Hash verification**: Compare computed hashes against expected values
-- 📁 **Batch processing**: Process entire directories
-- 🛡️ **Security focused**: Constant-time comparisons, secure salt generation
-- 🎨 **User friendly**: Real-time GUI updates, file drag & drop
+- 🔐 **19 Hash Algorithms**: SHA-256/512, SHA-3 family, SHAKE, BLAKE2/3, xxHash, MD5, SHA-1, Argon2, bcrypt, scrypt
+- � **HMAC Support**: Complete HMAC implementation for all supported algorithms
+- �📱 **Dual Interface**: Both CLI and GUI modes with modern dark theme
+- ⚡ **High Performance**: Rust implementation with optimized streaming and progress tracking
+- 🔍 **Hash Verification**: Compare computed hashes against expected values with constant-time comparison
+- 📁 **Batch Processing**: Process entire directories with progress indication
+- 🛡️ **Security Focused**: Constant-time comparisons, secure salt generation, modern algorithms
+- 🎨 **User Friendly**: Real-time GUI updates, file drag & drop, visual algorithm indicators
 - 🌍 **Cross-platform**: Works on macOS, Linux, and Windows
 
 ## 🚀 Quick Start
@@ -111,25 +112,29 @@ The GUI provides:
 
 ## 🎯 Project Status
 
-✅ **CLI Implementation**: Complete and fully functional  
-✅ **GUI Implementation**: Complete with egui/eframe  
-✅ **All Hash Algorithms**: MD5, SHA-1, SHA-256, SHA-512, BLAKE2, BLAKE3, bcrypt, scrypt, Argon2  
-✅ **File & Text Hashing**: Both supported with progress indicators  
-✅ **Hash Verification**: Full verification against expected values  
-✅ **Batch Processing**: Directory processing implemented  
-✅ **Cross-platform**: macOS, Linux, and Windows support  
-✅ **Documentation**: Comprehensive examples and usage guides
+✅ **Phase 1 Complete**: All objectives achieved  
+✅ **19 Hash Algorithms**: Including SHA-3, SHAKE, xxHash families  
+✅ **HMAC Support**: Complete implementation for all algorithms  
+✅ **Modern GUI**: Dark theme, real-time computation, modular architecture  
+✅ **CLI Implementation**: Full feature parity with enhanced capabilities  
+✅ **Code Quality**: Zero clippy warnings, perfect rustfmt formatting  
+✅ **Security**: Constant-time comparisons, secure random generation  
+✅ **Documentation**: Comprehensive and well-organized  
+✅ **Cross-platform**: macOS, Linux, and Windows support
 
-🚧 **In Progress**: Homebrew tap setup, crates.io publication
+🚀 **Ready for Production**: All features tested and stable
 
 ## 🔐 Supported Algorithms
 
 ### Fast Hash Algorithms (Files & Data)
 
-- **SHA-256** - General purpose, widely supported
-- **SHA-512** - High security, larger output
 - **BLAKE3** - Modern, fastest performance ⭐ **Recommended**
 - **BLAKE2b/2s** - High performance alternatives
+- **SHA-256** - General purpose, widely supported
+- **SHA-512** - High security, larger output
+- **SHA-3 Family** ✨ **New**: SHA3-224, SHA3-256, SHA3-384, SHA3-512 (Keccak-based)
+- **SHAKE Functions** ✨ **New**: SHAKE128, SHAKE256 (extendable output)
+- **xxHash Family** ✨ **New**: xxHash32, xxHash64, xxHash3 (ultra-fast, non-cryptographic)
 - **SHA-1** - Legacy compatibility (not recommended for security)
 - **MD5** - Legacy compatibility (not recommended for security)
 
@@ -138,6 +143,10 @@ The GUI provides:
 - **Argon2** - Modern, memory-hard ⭐ **Recommended for passwords**
 - **bcrypt** - Widely supported, moderate security
 - **scrypt** - Memory-hard, good security
+
+### HMAC Support ✨ **New**
+
+All algorithms above support HMAC (Hash-based Message Authentication Code) for authenticated hashing.
 
 ## 🔧 Algorithm Recommendations
 
@@ -200,24 +209,35 @@ cargo run --bin hash-forge-gui --features gui
 
 ```
 hash-forge/
-├── src/
+├── src/                 # Source code
 │   ├── main.rs          # CLI entry point
 │   ├── gui_main.rs      # GUI entry point
 │   ├── lib.rs           # Library exports
 │   ├── algorithms.rs    # Hash algorithm definitions
 │   ├── cli.rs           # CLI argument parsing
 │   ├── core.rs          # Core hashing engine
-│   ├── gui_core.rs      # GUI application logic
+│   ├── hmac_core.rs     # HMAC implementation
 │   ├── output.rs        # Output formatting
-│   └── utils.rs         # Utility functions
+│   ├── utils.rs         # Utility functions
+│   └── gui/             # Modular GUI structure
+│       ├── mod.rs       # Module organization
+│       ├── app_state.rs # Application state
+│       ├── algorithms.rs# Algorithm filtering
+│       ├── compute.rs   # Hash computation
+│       └── ui.rs        # UI rendering
+├── docs/                # GitHub Pages website
+├── docs-dev/            # Development documentation
+│   ├── gui/             # GUI-specific docs
+│   ├── phase1/          # Phase 1 development docs
+│   └── releases/        # Release documentation
+├── scripts/             # Build and utility scripts
+│   ├── build.sh         # Build automation
+│   ├── demo_phase1.sh   # CLI demo script
+│   ├── test_gui_phase1.sh# GUI test script
+│   └── release.sh       # Simple release automation
 ├── assets/              # Project assets
 │   └── image.png        # App icon (1024x1024)
-├── build/               # Build output directory (ignored by git)
-│   ├── Hash-Forge.dmg   # macOS installer
-│   └── *.tar.gz         # Distribution archives
-├── docs/                # GitHub Pages website
-├── scripts/             # Build and utility scripts
-└── tests/               # Integration tests
+└── target/              # Build output (ignored by git)
 ```
 
 ## 📋 Examples
@@ -272,7 +292,7 @@ hash-forge batch -d ./images -a blake3 -f base64
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+We welcome contributions! Please see [CONTRIBUTING.md](docs-dev/CONTRIBUTING.md) for guidelines.
 
 ### Areas for Contribution
 
